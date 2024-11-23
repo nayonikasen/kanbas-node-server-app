@@ -15,6 +15,7 @@ export default function QueryParameters(app) {
       case "divide":
         result = parseInt(a) / parseInt(b);
         break;
+
       default:
         result = "Invalid operation";
     }

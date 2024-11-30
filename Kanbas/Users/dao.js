@@ -1,6 +1,6 @@
 import db from "../Database/index.js";
 
-let users = db.users;
+let users = db.people;
 
 export const createUser = (user) => {
   const newUser = { ...user, _id: Date.now().toString() };

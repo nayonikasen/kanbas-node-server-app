@@ -18,7 +18,6 @@ export default function UserRoutes(app) {
     req.session["currentUser"] = currentUser;
     res.json(currentUser);
   };
-  
   const signup = (req, res) => {
     const user = dao.findUserByUsername(req.body.username);
     if (user) {
@@ -41,7 +40,6 @@ export default function UserRoutes(app) {
       res.status(401).json({ message: "Unable to login. Try again later." });
     }
   };
-  
 
   const signout = (req, res) => {
     req.session.destroy();
@@ -73,11 +71,22 @@ export default function UserRoutes(app) {
 
   const createCourse = (req, res) => {
     const currentUser = req.session["currentUser"];
-    console.log(currentUser);
 
     const newCourse = courseDao.createCourse(req.body);
 
     enrollmentsDao.enrollUserInCourse(currentUser._id, newCourse._id);
+    res.json(newCourse);
+  };
+
+  const fetchCourses = (req, res) => {
+    const currentUser = req.session["currentUser"];
+
+    if (!currentUser) {
+      res.sendStatus(401);
+      return;
+    }
+
+    courseDao.findAllCourses();
     res.json(newCourse);
   };
 
@@ -89,6 +98,7 @@ export default function UserRoutes(app) {
 
   app.get("/api/users/:userId/courses", findCoursesForEnrolledUser);
   app.post("/api/users/current/courses", createCourse);
+  app.get("/api/users/current/courses", fetchCourses);
   app.post("/api/users", createUser);
   app.get("/api/users", findAllUsers);
   app.get("/api/users/:userId", findUserById);

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import model from "./model.js";
 
 export const updateUser = (userId, user) =>
@@ -24,5 +25,6 @@ export const deleteUser = (userId) => model.deleteOne({ _id: userId });
 
 export const createUser = (user) => {
   delete user._id;
+  user._id=  new mongoose.Types.ObjectId().toString();
   return model.create(user);
 };

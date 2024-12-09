@@ -1,4 +1,5 @@
 import model from "./model.js";
+import mongoose from "mongoose";
 import enrollmentsModel from "../Enrollments/model.js";
 
 export function findAllCourses() {
@@ -11,12 +12,13 @@ export async function findCoursesForEnrolledUser(userId) {
     .populate("course")
     .populate("user");
 
-  const enrolledCourses = enrollments.map((en) => en.course);
+  const enrolledCourses = enrollments.map((en) => en.course).filter(course => course);
 
   return enrolledCourses;
 }
 export function createCourse(course) {
   delete course._id;
+  course._id=  new mongoose.Types.ObjectId().toString();
   return model.create(course);
 }
 export function deleteCourse(courseId) {
